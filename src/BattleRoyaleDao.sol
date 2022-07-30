@@ -42,6 +42,9 @@ contract BattleRoyaleDao is ERC20, ERC721TokenReceiver {
     /// @dev playerId->owner
     mapping(uint256 => address) public playerOwners;
 
+    // /// @dev whale ids
+    // uint[] ids =
+
     constructor(
         string memory _name,
         string memory _symbol,
@@ -57,6 +60,7 @@ contract BattleRoyaleDao is ERC20, ERC721TokenReceiver {
      * if not change it to have the asset transfered first before calling it
      * only players that entered the game before it started can enter
      * will not check if game has ended, be careful, saves gas.
+     * will not let whale enter, bad whale.
      * @param playerIds list of players ids to transfer
      */
     function enter(uint256[] calldata playerIds) public {
@@ -65,6 +69,7 @@ contract BattleRoyaleDao is ERC20, ERC721TokenReceiver {
             "not approved"
         );
         for (uint256 x = 0; x < playerIds.length; x++) {
+            require(!(playerIds[x] >= 57 && playerIds[x] <= 86), "no whale");
             uint256 hp = bRoyale.getHP(playerIds[x]);
             require(hp != 0, "Not in game");
             bRoyale.transferFrom(msg.sender, address(this), playerIds[x]);
