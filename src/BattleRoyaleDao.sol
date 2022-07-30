@@ -34,7 +34,7 @@ contract BattleRoyaleDao is ERC20, ERC721TokenReceiver {
     IRoyale constant bRoyale =
         IRoyale(0x8e094bC850929ceD3B4280Cc031540A897F39706);
 
-    /// @dev gnosis safe address for withdraw/killsafe
+    /// @dev gnosis safe address for killsafe
     address immutable supremeLeader;
 
     /// @dev store all ids for attack
@@ -89,7 +89,6 @@ contract BattleRoyaleDao is ERC20, ERC721TokenReceiver {
                 break;
             }
         }
-        hasWithdrawn[msg.sender] = true;
         _burn(msg.sender, 1);
         uint256 currentBalance = address(this).balance;
         bRoyale.flee(playerId);
