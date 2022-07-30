@@ -41,8 +41,6 @@ contract BattleRoyaleDao is ERC20, ERC721TokenReceiver {
     uint256[] players;
     /// @dev playerId->owner
     mapping(uint256 => address) public playerOwners;
-    /// @dev if user has withdrawn or not
-    mapping(address => bool) public hasWithdrawn;
 
     constructor(
         string memory _name,
@@ -136,8 +134,6 @@ contract BattleRoyaleDao is ERC20, ERC721TokenReceiver {
      * Winnings will be distributed pro rata according to the erc20 held by the user
      */
     function withdraw() public {
-        require(hasWithdrawn[msg.sender], "already withdrawn");
-        hasWithdrawn[msg.sender] = true;
         uint256 userBalance = balanceOf[msg.sender];
         payable(msg.sender).transfer(
             address(this).balance * (userBalance / totalSupply)
